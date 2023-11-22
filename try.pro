@@ -12,21 +12,27 @@ message(cpu_count: $$QMAKE_HOST.cpu_count)
 message(name: $$QMAKE_HOST.name)
 message(version: $$QMAKE_HOST.version)
 
+linux-g++{
+    DESTROOT=../../install/linux/x86-64
+    LIBS += $$DESTROOT/lib/openal/bin/libopenal.so
+    LIBS += $$DESTROOT/lib/openal/bin/libsndfile.a
+    INCLUDEPATH += $$DESTROOT/lib/openal/include
+}
 win32-g++{
-    DESTROOT=C:\Users\Ienfield\Desktop\DNAvatar\apps\install\gcc\x86-64
+    DESTROOT=..\..\install\gcc\x86-64
     LIBS += $$DESTROOT\lib\openal\bin\OpenAL32.dll
     LIBS += $$DESTROOT\lib\openal\bin\libsndfile.a
     INCLUDEPATH += $$DESTROOT\lib\openal\include
 }
 win32-msvc*{
-    DESTROOT=C:\Users\Ienfield\Desktop\DNAvatar\apps\install\msvc\x86-64
+    DESTROOT=..\..\install\msvc\x86-64
 
     #LIBS += $$DESTROOT\lib\openal\bin\OpenAL32.dll
     #LIBS += $$DESTROOT/lib/openAL/bin/libsndfile.a
     INCLUDEPATH += $$DESTROOT/lib/openal/include
 }
 macx{
-    DESTROOT=/Users/dnavatar/Desktop/_dnavatar/apps/install/mac/arm64
+    DESTROOT=../../install/mac/arm64
     LIBS += $$DESTROOT/lib/openAL/libsndfile.a
     LIBS += $$DESTROOT/lib/openAL/libopenal.dylib
     INCLUDEPATH += $$DESTROOT/lib/openAL/include

@@ -8,8 +8,8 @@ AnimatedItem::AnimatedItem(bool isFrameRate){
     angle = rand()%360;
     setRotation(angle);
     speed = 1;
-    int startX=rand()%500;
-    int startY=rand()%500;
+    int startX=rand()%400+100;
+    int startY=rand()%300+100;
 
     setPos(mapToParent(startX,startY));
     //qDebug() << "AnimatedItem";

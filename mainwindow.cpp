@@ -36,7 +36,7 @@ void MainWindow::makeAnim(){
     sceneAnim = new QGraphicsScene(this);
     ui->graphicsView->setScene(sceneAnim);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
-    sceneAnim->setSceneRect(20,20,ui->graphicsView->width()-20,ui->graphicsView->height()-20);
+    sceneAnim->setSceneRect(2,2,ui->graphicsView->width()-2,ui->graphicsView->height()-2);
     QPen redpen = QPen(Qt::red);
     QLineF topLine(sceneAnim->sceneRect().topLeft(),sceneAnim->sceneRect().topRight());
     QLineF leftLine(sceneAnim->sceneRect().topLeft(),sceneAnim->sceneRect().bottomLeft());
@@ -46,7 +46,7 @@ void MainWindow::makeAnim(){
     sceneAnim->addLine(leftLine,redpen);
     sceneAnim->addLine(rightLine,redpen);
     sceneAnim->addLine(bottomLine,redpen);
-    int itemCount = 100;
+    int itemCount = 10;
     for (int i=0;i<itemCount; i++){
         AnimatedItem *item= new AnimatedItem(i==0);
         sceneAnim->addItem(item);
