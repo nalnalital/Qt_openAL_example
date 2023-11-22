@@ -24,6 +24,7 @@ public:
     ~MainWindow();
 
 private slots:
+    void loadAll(bool is);
     void play1(bool is);
     void play2(bool is);
     void play3(bool is);
@@ -33,12 +34,12 @@ private slots:
 private:
     Ui::MainWindow *ui;
     void makeAnim();
-    QTimer *timerAnim;
-    QGraphicsScene *sceneAnim;
-    MusicBuffer* myMusic;
-    QTimer *timerMusic;
-    SoundSource* mySpeaker1;
-    SoundSource* mySpeaker2;
+    QTimer *timerAnim=nullptr;
+    QGraphicsScene *sceneAnim=nullptr;
+    MusicBuffer* myMusic=nullptr;
+    QTimer *timerMusic=nullptr;
+    SoundSource* mySpeaker1=nullptr;
+    SoundSource* mySpeaker2=nullptr;
     ALuint sound1;
     ALuint sound2;
 };

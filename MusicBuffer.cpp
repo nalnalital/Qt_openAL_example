@@ -3,7 +3,9 @@
 #include <AL/alext.h>
 #include <stdlib.h>
 
-void MusicBuffer::Play()
+#include <QDebug>
+
+bool MusicBuffer::Play()
 {
 	ALsizei i;
 
@@ -26,7 +28,8 @@ void MusicBuffer::Play()
 	}
 	if (alGetError() != AL_NO_ERROR)
 	{
-		throw("Error buffering for playback");
+        qDebug() << (">>> Error buffering for playback");
+        return false;
 	}
 
 	/* Now queue and start playback! */
@@ -34,9 +37,10 @@ void MusicBuffer::Play()
 	alSourcePlay(p_Source);
 	if (alGetError() != AL_NO_ERROR)
 	{
-		throw("Error starting playback");
+        qDebug() << (">>> Error starting playback");
+        return false;
 	}
-
+    return true;
 }
 
 void MusicBuffer::Pause()
@@ -65,7 +69,8 @@ void MusicBuffer::UpdateBufferStream()
 	alGetSourcei(p_Source, AL_BUFFERS_PROCESSED, &processed);
 	if (alGetError() != AL_NO_ERROR)
 	{
-		throw("error checking music source state");
+        qDebug() << (">>> error checking music source state");
+        return;
 	}
 
 	/* Unqueue and handle each processed buffer */
@@ -89,7 +94,8 @@ void MusicBuffer::UpdateBufferStream()
 		}
 		if (alGetError() != AL_NO_ERROR)
 		{
-			throw("error buffering music data");
+            qDebug() << (">>> error buffering music data");
+            return;
 		}
 	}
 
@@ -106,7 +112,8 @@ void MusicBuffer::UpdateBufferStream()
 		alSourcePlay(p_Source);
 		if (alGetError() != AL_NO_ERROR)
 		{
-			throw("error restarting music playback");
+            qDebug() << (">>> error restarting music playback");
+            return;
 		}
 	}
 
@@ -134,16 +141,16 @@ void MusicBuffer::SetGain(const float& val)
 
 MusicBuffer::MusicBuffer(const char* filename)
 {
-	alGenSources(1, &p_Source);
-	alGenBuffers(NUM_BUFFERS, p_Buffers);
-
-	std::size_t frame_size;
-
 	p_SndFile = sf_open(filename, SFM_READ, &p_Sfinfo);
 	if (!p_SndFile)
-	{
-		throw("could not open provided music file -- check path");
-	}
+    {
+        qDebug() << (">>> could not open provided music file -- check path");
+        return;
+    }
+    alGenSources(1, &p_Source);
+    alGenBuffers(NUM_BUFFERS, p_Buffers);
+
+    std::size_t frame_size;
 
 	/* Get the sound format, and figure out the OpenAL format */
 	if (p_Sfinfo.channels == 1)
@@ -164,7 +171,8 @@ MusicBuffer::MusicBuffer(const char* filename)
 	{
 		sf_close(p_SndFile);
 		p_SndFile = NULL;
-		throw("Unsupported channel count from file");
+        qDebug() << (">>> Unsupported channel count from file");
+        return;
 	}
 
 	frame_size = ((size_t)BUFFER_SAMPLES * (size_t)p_Sfinfo.channels) * sizeof(short);

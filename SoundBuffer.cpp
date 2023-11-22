@@ -1,7 +1,11 @@
 #include "SoundBuffer.h"
 #include <sndfile.h>
 #include <inttypes.h>
+#include <limits.h>
+#include <stdlib.h>
 #include <AL/alext.h>
+
+#include <QDebug>
 
 SoundBuffer* SoundBuffer::get()
 {
@@ -24,12 +28,12 @@ ALuint SoundBuffer::addSoundEffect(const char* filename)
 	sndfile = sf_open(filename, SFM_READ, &sfinfo);
 	if (!sndfile)
 	{
-		fprintf(stderr, "Could not open audio in %s: %s\n", filename, sf_strerror(sndfile));
+        qDebug() << "Could not open audio in" << filename << sf_strerror(sndfile);
 		return 0;
 	}
 	if (sfinfo.frames < 1 || sfinfo.frames >(sf_count_t)(INT_MAX / sizeof(short)) / sfinfo.channels)
 	{
-		fprintf(stderr, "Bad sample count in %s (%" PRId64 ")\n", filename, sfinfo.frames);
+        qDebug() << "Bad sample count in " << filename << sfinfo.frames;
 		sf_close(sndfile);
 		return 0;
 	}
@@ -52,7 +56,7 @@ ALuint SoundBuffer::addSoundEffect(const char* filename)
 	}
 	if (!format)
 	{
-		fprintf(stderr, "Unsupported channel count: %d\n", sfinfo.channels);
+        qDebug() << "Unsupported channel count: " << sfinfo.channels;
 		sf_close(sndfile);
 		return 0;
 	}
@@ -65,7 +69,7 @@ ALuint SoundBuffer::addSoundEffect(const char* filename)
 	{
 		free(membuf);
 		sf_close(sndfile);
-		fprintf(stderr, "Failed to read samples in %s (%" PRId64 ")\n", filename, num_frames);
+        qDebug() << "Failed to read samples in " << filename << num_frames;
 		return 0;
 	}
 	num_bytes = (ALsizei)(num_frames * sfinfo.channels) * (ALsizei)sizeof(short);
@@ -84,7 +88,7 @@ ALuint SoundBuffer::addSoundEffect(const char* filename)
 	err = alGetError();
 	if (err != AL_NO_ERROR)
 	{
-		fprintf(stderr, "OpenAL Error: %s\n", alGetString(err));
+        qDebug() << "OpenAL Error: " << alGetString(err);
 		if (buffer && alIsBuffer(buffer))
 			alDeleteBuffers(1, &buffer);
 		return 0;

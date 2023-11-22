@@ -4,7 +4,7 @@
 class MusicBuffer
 {
 public:
-	void Play();
+    bool Play();
 	void Pause();
 	void Stop();
 	void Resume();
